@@ -50,4 +50,5 @@ jobs:
             host: ${{ secrets.TENCENT_CLOUD_IP }}
             username: ${{ secrets.TENCENT_CLOUD_NAME }}
             password: ${{ secrets.TENCENT_CLOUD_PASSWORD }}
-            script: docker stop flaskweb && docker rm flaskweb && docker pull liubai01/liubaihome:latest && docker pull docker run -it -d -p 8080:8000 --name flaskweb liubai01/liubaihome:latest
+            script: docker stop flaskweb || docker rm flaskweb || docker pull liubai01/liubaihome:latest && docker run -it -d -p 8080:8000 --name flaskweb liubai01/liubaihome:latest
+
