@@ -60,6 +60,9 @@ jobs:
             script: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }} || docker pull liubai01/liubaihome:latest && docker run -it -d -p 443:8000 --name flaskweb liubai01/liubaihome:latest
 
       - name: Extract SSL Certificate (SSH)
-        run: |
-          docker exec flaskweb bash -c 'echo "${{ secrets.SSL_CRT }}" > server.crt'
-          docker exec flaskweb bash -c 'echo "${{ secrets.SSL_KEY }}" > server.key'
+        uses: appleboy/ssh-action@master
+        with:
+            host: ${{ secrets.TENCENT_CLOUD_IP }}
+            username: ${{ secrets.TENCENT_CLOUD_NAME }}
+            password: ${{ secrets.TENCENT_CLOUD_PASSWORD }}
+            script: docker exec flaskweb bash -c 'echo "${{ secrets.SSL_CRT }}" > server.crt' && docker exec flaskweb bash -c 'echo "${{ secrets.SSL_KEY }}" > server.key'
