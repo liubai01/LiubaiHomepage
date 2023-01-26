@@ -1,1 +1,0 @@
-gunicorn --certfile=server.crt --keyfile=server.key -w 1 app:app -b=0.0.0.0:8000
