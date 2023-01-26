@@ -34,14 +34,14 @@ jobs:
         id: meta
         uses: docker/metadata-action@v2
         with:
-          images: liubai01/liubaihome:latest
+          images: liubai01/liubaihome
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
           context: .
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: latest
           labels: ${{ steps.meta.outputs.labels }}
 
       # ssh login
