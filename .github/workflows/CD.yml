@@ -40,6 +40,7 @@ jobs:
         run: |
           echo "${{ secrets.SSL_CRT }}" > server.crt
           echo "${{ secrets.SSL_KEY }}" > server.key
+          ls
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
