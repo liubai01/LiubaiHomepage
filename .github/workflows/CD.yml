@@ -34,14 +34,14 @@ jobs:
         id: meta
         uses: docker/metadata-action@v2
         with:
-          images: liubai01/liubaihome:latest
+          images: liubai01/liubaihome:prod
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
           context: .
           push: true
-          tags: liubai01/liubaihome:latest
+          tags: liubai01/liubaihome:prod
 
       - name: Shutdown All Container (SSH)
         uses: appleboy/ssh-action@master
@@ -57,7 +57,7 @@ jobs:
             host: ${{ secrets.TENCENT_CLOUD_IP }}
             username: ${{ secrets.TENCENT_CLOUD_NAME }}
             password: ${{ secrets.TENCENT_CLOUD_PASSWORD }}
-            script: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }} || docker pull liubai01/liubaihome:latest && docker run -it -d -p 443:8000 --name flaskweb liubai01/liubaihome:latest
+            script: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }} || docker pull liubai01/liubaihome:prod && docker run -it -d -p 443:8000 --name flaskweb liubai01/liubaihome:prod
 
       - name: Extract SSL Certificate (SSH)
         uses: appleboy/ssh-action@master
