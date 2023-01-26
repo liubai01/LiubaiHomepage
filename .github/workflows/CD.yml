@@ -36,12 +36,6 @@ jobs:
         with:
           images: liubai01/liubaihome:latest
 
-      - name: Extract SSL Certificate
-        run: |
-          echo "${{ secrets.SSL_CRT }}" > server.crt
-          echo "${{ secrets.SSL_KEY }}" > server.key
-          ls
-
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
@@ -49,10 +43,23 @@ jobs:
           push: true
           tags: liubai01/liubaihome:latest
 
-      - name: Start the Container (SSL)
+      - name: Shutdown All Container (SSH)
         uses: appleboy/ssh-action@master
         with:
             host: ${{ secrets.TENCENT_CLOUD_IP }}
             username: ${{ secrets.TENCENT_CLOUD_NAME }}
             password: ${{ secrets.TENCENT_CLOUD_PASSWORD }}
-            script: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }} || docker rm -f flaskweb || docker pull liubai01/liubaihome:latest && docker run -it -d -p 443:8000 --name flaskweb liubai01/liubaihome:latest
+            script: docker ps -q --filter "name=flaskweb" | grep -q . && docker stop flaskweb && docker rm -fv flaskweb
+
+      - name: Pull & Start the Container (SSH)
+        uses: appleboy/ssh-action@master
+        with:
+            host: ${{ secrets.TENCENT_CLOUD_IP }}
+            username: ${{ secrets.TENCENT_CLOUD_NAME }}
+            password: ${{ secrets.TENCENT_CLOUD_PASSWORD }}
+            script: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }} || docker pull liubai01/liubaihome:latest && docker run -it -d -p 443:8000 --name flaskweb liubai01/liubaihome:latest
+
+      - name: Extract SSL Certificate (SSH)
+        run: |
+          docker exec flaskweb bash -c 'echo "${{ secrets.SSL_CRT }}" > server.crt'
+          docker exec flaskweb bash -c 'echo "${{ secrets.SSL_KEY }}" > server.key'
