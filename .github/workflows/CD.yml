@@ -36,6 +36,11 @@ jobs:
         with:
           images: liubai01/liubaihome:latest
 
+      - name: Extract SSL Certificate
+        run: |
+          echo "${{ secrets.SSL_CRT }}" > server.crt
+          echo "${{ secrets.SSL_KEY }}" > server.key
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
@@ -43,12 +48,10 @@ jobs:
           push: true
           tags: liubai01/liubaihome:latest
 
-      # ssh login
-      - name: Ssh login
+      - name: Start the Container (SSL)
         uses: appleboy/ssh-action@master
         with:
             host: ${{ secrets.TENCENT_CLOUD_IP }}
             username: ${{ secrets.TENCENT_CLOUD_NAME }}
             password: ${{ secrets.TENCENT_CLOUD_PASSWORD }}
-            script: docker rm -f flaskweb || docker pull liubai01/liubaihome:latest && docker run -it -d -p 8080:8000 --name flaskweb liubai01/liubaihome:latest
-
+            script: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }} || docker rm -f flaskweb || docker pull liubai01/liubaihome:latest && docker run -it -d -p 443:8000 --name flaskweb liubai01/liubaihome:latest

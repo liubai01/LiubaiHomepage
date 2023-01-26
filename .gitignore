@@ -127,3 +127,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+
+# SSL Certificates
+*.csr
+*.key
+*.crt
