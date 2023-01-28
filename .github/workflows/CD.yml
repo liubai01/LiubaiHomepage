@@ -50,9 +50,9 @@ jobs:
           username: ${{ secrets.TENCENT_CLOUD_NAME }}
           password: ${{ secrets.TENCENT_CLOUD_PASSWORD }}
           port: 22
-          source: "docker-compose.yml, deploy.py, server_data/nginx"
+          source: "docker-compose.yml, deploy.py, server_data/nginx, server_data/nextcloud/config"
           target: "./liubaihome"
-          rm: true
+          overwrite: true
 
       - name: Pull the Container From DockerHub (SSH)
         uses: appleboy/ssh-action@master
