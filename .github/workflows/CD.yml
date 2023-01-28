@@ -50,7 +50,7 @@ jobs:
           username: ${{ secrets.TENCENT_CLOUD_NAME }}
           password: ${{ secrets.TENCENT_CLOUD_PASSWORD }}
           port: 22
-          source: "Dockerfile, deploy.py"
+          source: "docker-compose.yml, deploy.py"
           target: "./"
 
       - name: Pull the Container From DockerHub (SSH)
