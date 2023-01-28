@@ -16,3 +16,5 @@ services:
       - ./server_data/nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./server_data/nginx/default.conf:/etc/nginx/conf.d/default.conf
       - ./server_data/nginx/docs:/usr/share/nginx/docs
+      - ./server.crt:/etc/nginx/certs/server.crt
+      - ./server.key:/etc/nginx/certs/server.key

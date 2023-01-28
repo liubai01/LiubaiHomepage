@@ -78,10 +78,10 @@ jobs:
       #       password: ${{ secrets.TENCENT_CLOUD_PASSWORD }}
       #       script: docker ps -q --filter "name=flaskweb" | grep -q . && docker stop flaskweb && docker rm -fv flaskweb
 
-      # - name: Extract SSL Certificate (SSH)
-      #   uses: appleboy/ssh-action@master
-      #   with:
-      #       host: ${{ secrets.TENCENT_CLOUD_IP }}
-      #       username: ${{ secrets.TENCENT_CLOUD_NAME }}
-      #       password: ${{ secrets.TENCENT_CLOUD_PASSWORD }}
-      #       script: docker exec flaskweb bash -c 'echo "${{ secrets.SSL_CRT }}" > server.crt' && docker exec flaskweb bash -c 'echo "${{ secrets.SSL_KEY }}" > server.key'
+      - name: Extract SSL Certificate (SSH)
+        uses: appleboy/ssh-action@master
+        with:
+            host: ${{ secrets.TENCENT_CLOUD_IP }}
+            username: ${{ secrets.TENCENT_CLOUD_NAME }}
+            password: ${{ secrets.TENCENT_CLOUD_PASSWORD }}
+            script: docker exec flaskweb bash -c 'echo "${{ secrets.SSL_CRT }}" > ./liubaihome/server.crt' && docker exec flaskweb bash -c 'echo "${{ secrets.SSL_KEY }}" > ./liubaihome/server.key'
