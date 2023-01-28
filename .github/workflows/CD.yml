@@ -62,6 +62,14 @@ jobs:
             password: ${{ secrets.TENCENT_CLOUD_PASSWORD }}
             script: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }} && docker pull liubai01/liubaihome:prod
 
+      - name: Extract SSL Certificate (SSH)
+        uses: appleboy/ssh-action@master
+        with:
+            host: ${{ secrets.TENCENT_CLOUD_IP }}
+            username: ${{ secrets.TENCENT_CLOUD_NAME }}
+            password: ${{ secrets.TENCENT_CLOUD_PASSWORD }}
+            script: echo "${{ secrets.SSL_CRT }}" > ./liubaihome/server.crt && echo "${{ secrets.SSL_KEY }}" > ./liubaihome/server.key
+
       - name: Deploy (SSH)
         uses: appleboy/ssh-action@master
         with:
@@ -77,11 +85,3 @@ jobs:
       #       username: ${{ secrets.TENCENT_CLOUD_NAME }}
       #       password: ${{ secrets.TENCENT_CLOUD_PASSWORD }}
       #       script: docker ps -q --filter "name=flaskweb" | grep -q . && docker stop flaskweb && docker rm -fv flaskweb
-
-      - name: Extract SSL Certificate (SSH)
-        uses: appleboy/ssh-action@master
-        with:
-            host: ${{ secrets.TENCENT_CLOUD_IP }}
-            username: ${{ secrets.TENCENT_CLOUD_NAME }}
-            password: ${{ secrets.TENCENT_CLOUD_PASSWORD }}
-            script: echo "${{ secrets.SSL_CRT }}" > ./liubaihome/server.crt && echo "${{ secrets.SSL_KEY }}" > ./liubaihome/server.key
