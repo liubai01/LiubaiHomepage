@@ -2,6 +2,7 @@
 $CONFIG = array (
   'htaccess.RewriteBase' => '/',
   'overwritewebroot' => '/data',
+  'config_is_read_only' => true,
   'memcache.local' => '\\OC\\Memcache\\APCu',
   'apps_paths' => 
   array (
