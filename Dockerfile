@@ -9,4 +9,4 @@ RUN pip3 install -r requirements.txt -i https://mirrors.cloud.tencent.com/pypi/s
 
 COPY . .
 
-CMD ["python3", "run.py"]
+CMD ["python3", "run_http.py"]

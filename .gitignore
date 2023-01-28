@@ -133,3 +133,5 @@ dmypy.json
 *.csr
 *.key
 *.crt
+
+server_data/*
