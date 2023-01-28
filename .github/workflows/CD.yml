@@ -43,6 +43,17 @@ jobs:
           push: true
           tags: liubai01/liubaihome:prod
 
+      - name: Copy Deploy Files (SSH)
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.TENCENT_CLOUD_IP }}
+          username: ${{ secrets.TENCENT_CLOUD_NAME }}
+          password: ${{ secrets.TENCENT_CLOUD_PASSWORD }}
+          port: 22
+          source: "Docerfile, deploy.py"
+          target: "./"
+          rm: true
+
       - name: Pull the Container From DockerHub (SSH)
         uses: appleboy/ssh-action@master
         with:
@@ -50,16 +61,6 @@ jobs:
             username: ${{ secrets.TENCENT_CLOUD_NAME }}
             password: ${{ secrets.TENCENT_CLOUD_PASSWORD }}
             script: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }} && docker pull liubai01/liubaihome:prod
-
-      - name: Copy Deploy Files (SSH)
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.TENCENT_CLOUD_NAME }}
-          username: ${{ secrets.TENCENT_CLOUD_NAME }}
-          password: ${{ secrets.TENCENT_CLOUD_PASSWORD }}
-          port: 22
-          source: "Docerfile, deploy.py"
-          target: "./"
 
       - name: Deploy (SSH)
         uses: appleboy/ssh-action@master
