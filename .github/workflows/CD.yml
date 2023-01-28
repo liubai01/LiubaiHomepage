@@ -43,26 +43,44 @@ jobs:
           push: true
           tags: liubai01/liubaihome:prod
 
-      - name: Shutdown All Container (SSH)
+      - name: Pull the Container From DockerHub (SSH)
         uses: appleboy/ssh-action@master
         with:
             host: ${{ secrets.TENCENT_CLOUD_IP }}
             username: ${{ secrets.TENCENT_CLOUD_NAME }}
             password: ${{ secrets.TENCENT_CLOUD_PASSWORD }}
-            script: docker ps -q --filter "name=flaskweb" | grep -q . && docker stop flaskweb && docker rm -fv flaskweb
+            script: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }} && docker pull liubai01/liubaihome:prod
 
-      - name: Pull & Start the Container (SSH)
-        uses: appleboy/ssh-action@master
+      - name: Copy Deploy Files (SSH)
+        uses: appleboy/scp-action@master
         with:
-            host: ${{ secrets.TENCENT_CLOUD_IP }}
-            username: ${{ secrets.TENCENT_CLOUD_NAME }}
-            password: ${{ secrets.TENCENT_CLOUD_PASSWORD }}
-            script: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }} || docker pull liubai01/liubaihome:prod && docker run -it -d -p 80:8000 --name flaskweb liubai01/liubaihome:prod
+          host: ${{ secrets.TENCENT_CLOUD_NAME }}
+          username: ${{ secrets.TENCENT_CLOUD_NAME }}
+          password: ${{ secrets.TENCENT_CLOUD_PASSWORD }}
+          port: 22
+          source: "Docerfile, deploy.py"
+          target: "./"
 
-      - name: Extract SSL Certificate (SSH)
+      - name: Deploy (SSH)
         uses: appleboy/ssh-action@master
         with:
             host: ${{ secrets.TENCENT_CLOUD_IP }}
             username: ${{ secrets.TENCENT_CLOUD_NAME }}
             password: ${{ secrets.TENCENT_CLOUD_PASSWORD }}
-            script: docker exec flaskweb bash -c 'echo "${{ secrets.SSL_CRT }}" > server.crt' && docker exec flaskweb bash -c 'echo "${{ secrets.SSL_KEY }}" > server.key'
+            script: python3 deploy.py
+
+      # - name: Shutdown All Container (SSH)
+      #   uses: appleboy/ssh-action@master
+      #   with:
+      #       host: ${{ secrets.TENCENT_CLOUD_IP }}
+      #       username: ${{ secrets.TENCENT_CLOUD_NAME }}
+      #       password: ${{ secrets.TENCENT_CLOUD_PASSWORD }}
+      #       script: docker ps -q --filter "name=flaskweb" | grep -q . && docker stop flaskweb && docker rm -fv flaskweb
+
+      # - name: Extract SSL Certificate (SSH)
+      #   uses: appleboy/ssh-action@master
+      #   with:
+      #       host: ${{ secrets.TENCENT_CLOUD_IP }}
+      #       username: ${{ secrets.TENCENT_CLOUD_NAME }}
+      #       password: ${{ secrets.TENCENT_CLOUD_PASSWORD }}
+      #       script: docker exec flaskweb bash -c 'echo "${{ secrets.SSL_CRT }}" > server.crt' && docker exec flaskweb bash -c 'echo "${{ secrets.SSL_KEY }}" > server.key'
