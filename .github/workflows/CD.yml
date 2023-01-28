@@ -52,7 +52,6 @@ jobs:
           port: 22
           source: "Docerfile, deploy.py"
           target: "./"
-          rm: true
 
       - name: Pull the Container From DockerHub (SSH)
         uses: appleboy/ssh-action@master
