@@ -8,8 +8,6 @@ services:
   nextcloud:
     image: "nextcloud"
     container_name: "nextcloud"
-    # ports:
-    #   - "8080:80"
     volumes:
       - ./server_data/nextcloud/config:/var/www/html/config
       - ./server_data/nextcloud/data:/var/www/html/data
