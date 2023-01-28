@@ -51,7 +51,8 @@ jobs:
           password: ${{ secrets.TENCENT_CLOUD_PASSWORD }}
           port: 22
           source: "docker-compose.yml, deploy.py, server_data/nginx"
-          target: "./"
+          target: "./liubaihome"
+          rm: true
 
       - name: Pull the Container From DockerHub (SSH)
         uses: appleboy/ssh-action@master
@@ -67,7 +68,7 @@ jobs:
             host: ${{ secrets.TENCENT_CLOUD_IP }}
             username: ${{ secrets.TENCENT_CLOUD_NAME }}
             password: ${{ secrets.TENCENT_CLOUD_PASSWORD }}
-            script: python3 deploy.py
+            script: cd liubaihome && python3 deploy.py
 
       # - name: Shutdown All Container (SSH)
       #   uses: appleboy/ssh-action@master
