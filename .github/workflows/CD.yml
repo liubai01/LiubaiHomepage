@@ -49,7 +49,7 @@ jobs:
             host: ${{ secrets.TENCENT_CLOUD_IP }}
             username: ${{ secrets.TENCENT_CLOUD_NAME }}
             password: ${{ secrets.TENCENT_CLOUD_PASSWORD }}
-            script: echo "${{ secrets.SSL_CRT }}" > ./liubaihome/server.crt && echo "${{ secrets.SSL_KEY }}" > ./liubaihome/server.key
+            script: echo "${{ secrets.SSL_CRT }}" > server.crt && echo "${{ secrets.SSL_KEY }}" > server.key
 
       - name: Copy Deploy Files (SSH)
         uses: appleboy/scp-action@master
@@ -59,7 +59,7 @@ jobs:
           password: ${{ secrets.TENCENT_CLOUD_PASSWORD }}
           port: 22
           source: "docker-compose.yml, deploy.py, server_data/nginx"
-          target: "./liubaihome"
+          target: "./"
           overwrite: true
 
       - name: Pull the Container From DockerHub (SSH)
@@ -76,7 +76,7 @@ jobs:
             host: ${{ secrets.TENCENT_CLOUD_IP }}
             username: ${{ secrets.TENCENT_CLOUD_NAME }}
             password: ${{ secrets.TENCENT_CLOUD_PASSWORD }}
-            script: cd liubaihome && python3 deploy.py
+            script: python3 deploy.py
 
       # - name: Shutdown All Container (SSH)
       #   uses: appleboy/ssh-action@master
