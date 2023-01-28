@@ -84,4 +84,4 @@ jobs:
             host: ${{ secrets.TENCENT_CLOUD_IP }}
             username: ${{ secrets.TENCENT_CLOUD_NAME }}
             password: ${{ secrets.TENCENT_CLOUD_PASSWORD }}
-            script: docker exec flaskweb bash -c 'echo "${{ secrets.SSL_CRT }}" > ./liubaihome/server.crt' && docker exec flaskweb bash -c 'echo "${{ secrets.SSL_KEY }}" > ./liubaihome/server.key'
+            script: echo "${{ secrets.SSL_CRT }}" > ./liubaihome/server.crt && echo "${{ secrets.SSL_KEY }}" > ./liubaihome/server.key
